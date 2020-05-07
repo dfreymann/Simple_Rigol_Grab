@@ -2,7 +2,9 @@
 # simple_rigol_grab
 # 
 # attempt to simplify my usage of rigol_grab
-# IP address is stored in ~/Library/Application Support/SimpleRigolGrab.json' 
+# IP address is stored in ~/Library/Application Support/SimpleRigolGrab.json'
+#
+# 5.7.20 working version; need to annotate and fully understand code
 #
 # limiting its functionality: 
 #  1) IP address only
@@ -13,16 +15,19 @@
 #  6) Add check that IP has a Rigol at address
 #  7) Add dialog announcing what was done - this displays the image
 #  7.1) Add announcement if failure, also
+#  8) Read target folder (e.g. Desktop) from external file
 # To do:
 #  - 
-#  8) Convert to App
-#  9) Convert to menubar App (only?)
+#  9) Fully annotate 'code for beginners'
+#  10) Convert to App
+#  11) Convert to menubar App (only?)
 # Future:  
 #  -
-#  9) Prompt for file descriptor to add to filename
-#  10) Image file to Clipboard? 
-#  11) Prompt for IP if external not available, and write to JSON
-#  12) ... other? 
+#  12) Prompt for file descriptor to add to filename 
+#  13) Image file to Clipboard? 
+#  14) Prompt for IP if external not available, and write to JSON
+#  15) Prompt for target folder if not defined, and write to JSON
+#  16) ... other? 
 #  
 # ---------
 # based on original source - 
@@ -97,7 +102,7 @@ class RigolGrab(object):
         # will need error checking
 
         filestring = descriptor + datestring + '.png'
-        file_to_write = Path.home() / 'Desktop' / filestring 
+        file_to_write = Path.home() / self.get_folder() / filestring 
         
         return (file_to_write)
 
@@ -118,9 +123,32 @@ class RigolGrab(object):
 
     def get_IPAddress(self):
         file_with_address = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
+        
+        # "It is good practice to use the with keyword when dealing with file objects. The 
+        # advantage is that the file is properly closed after its suite finishes, even if 
+        # an exception is raised at some point. ... If you’re not using the with keyword, 
+        # then you should call f.close() to close the file and immediately free up any 
+        # system resources used by it."
         with open(file_with_address) as json_file:
             data = json.load(json_file) 
+        
+        # 5.7.20 Here, will have to handle exception if this file doesn't exist, and 
+        # promptfor input. Also, should check for validity. 
+
         return(data["IP_ADDRESS"])
+
+    def get_folder(self):
+        # 5.7.20 This is redundent with get_IPAddress, but OK for now. 
+        file_with_folder = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
+        
+        with open(file_with_folder) as json_file:
+            data = json.load(json_file) 
+        
+        # 5.7.20 Here, will have to handle exception if this file doesn't exist, and 
+        # prompt for input. Also, should check for validity. 
+
+        return(data["FOLDER"])
+
 
     def report_failure(self, message):
         NORM_FONT= ("San Francisco", 12)
