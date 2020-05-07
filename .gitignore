@@ -1,0 +1,4 @@
+*.png
+.vscode
+build
+dist
