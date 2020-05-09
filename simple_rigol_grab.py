@@ -1,10 +1,26 @@
 # dmf 5.6.20 
 # simple_rigol_grab
 # 
-# attempt to simplify my usage of rigol_grab
-# IP address is stored in ~/Library/Application Support/SimpleRigolGrab.json'
+# attempt to simplify my usage of rigol_grab (OS X only)
+#
+# configuration: 
+#   > rigol connected via known IP address
+#   > known IP address and output folder stored in 
+#       '~/Library/Application Support/SimpleRigolGrab.json'
+#
+# functionality: 
+#   > grab the image from the rigol
+#   > if success, save file to disk and display the image for 5s  
+#   > if fail, error message popup
+#   > done
+#
+# in progress:
+# the goal is to convert this to an app -> click and done
 #
 # 5.7.20 working version; need to annotate and fully understand code
+# 5.9.20 removing verbose and auto_view arguments; will replace the latter
+# with an option button to open the file in an editor (future). 
+# # annotated code to try to understand as much as I can for now. 
 #
 # limiting its functionality: 
 #  1) IP address only
@@ -16,9 +32,9 @@
 #  7) Add dialog announcing what was done - this displays the image
 #  7.1) Add announcement if failure, also
 #  8) Read target folder (e.g. Desktop) from external file
+#  9) Fully annotate 'code for beginners'
 # To do:
 #  - 
-#  9) Fully annotate 'code for beginners'
 #  10) Convert to App
 #  11) Convert to menubar App (only?)
 # Future:  
@@ -27,7 +43,8 @@
 #  13) Image file to Clipboard? 
 #  14) Prompt for IP if external not available, and write to JSON
 #  15) Prompt for target folder if not defined, and write to JSON
-#  16) ... other? 
+#  16) Add an 'edit' button to image window to open in local editor
+#  17) ... other? 
 #  
 # ---------
 # based on original source - 
@@ -50,51 +67,84 @@ from datetime import datetime
 # use this to handle file path
 from pathlib import Path 
 
-
+# Inherit base class called 'object'. Python 2 requires this to define 'new style'
+# class; Python 3 this is optional but good practice.  
 class RigolGrab(object):
 
-    def __init__(self, verbose=False):
-        self._verbose = verbose
+    def __init__(self):
+
+        # as I understand it, these are initialized in __init__ like this to 
+        # be globally available to methods within the class, and by convention
+        # not accessed from without. 
         self._rigol = None
+        self._data = None
         self._resource_manager = pyvisa.ResourceManager()
 
-    def grab(self, filename='rigol.png', auto_view=True):
+    # do the things... 
+    def grab(self):
 
+        # get the image data from the oscilloscope. method self_rigol() identifies 
+        # and opens the ni-visa resource if available. 
         buf = self.rigol().query_binary_values(':DISP:DATA? ON,0,PNG', datatype='B')
 
+        # the filename contains a timestamp only, for now
+        filename = self.get_timestamp_file()
+        
+        # 'wb' here is w - write, b - binary
         with open(filename, 'wb') as f:
-            self.verbose_print('Capturing screen to', filename)
             f.write(bytearray(buf))
 
+        # report succesful write and display the image 
         self.report_status(filename)
 
-        if auto_view:
-            self.open_file_with_system_viewer(filename)
+        # (future) this will be re-configured to respond to an 'edit' button during
+        # display (which otherwise times-out and closes) to go directly to editing
+        # self.open_file_with_system_viewer(filename)
 
+    # find the device... 
     def rigol(self):
    
+        # None keyword is used to define a NULL... None is a datatype 
+        # of its own. It is not 'True' or 'False'
         if self._rigol == None:
 
             inst = 'TCPIP0::{}::INSTR'
-            name = inst.format(self.get_IPAddress())
+            name = inst.format(self.get_IPaddress())
 
-            self.verbose_print('Opening', name)
+            # open the connection
             try:
                 self._rigol = self._resource_manager.open_resource(name, write_termination='\n', read_termination='\n')
             except:
                 self.err_out('Could not open oscilloscope')
 
-            self.check_for_rigol()
+            # check it's a Rigol
+            if ("RIGOL" in self._rigol.query("*IDN?")) is False:
+                self.err_out('No RIGOL at that IP address')
 
         return self._rigol
 
-    def check_for_rigol(self): 
-
-        if ("RIGOL" in self.rigol().query("*IDN?")) is False:
-            self.err_out('No RIGOL at that IP address')
-
-    def get_timestamp_file(self):
+    # access the IP configuration parameter
+    def get_IPaddress(self):
+        file_with_address = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
         
+        # "It is good practice to use the with keyword when dealing with file objects. The 
+        # advantage is that the file is properly closed after its suite finishes, even if 
+        # an exception is raised at some point. ... If you’re not using the with keyword, 
+        # then you should call f.close() to close the file and immediately free up any 
+        # system resources used by it."
+        with open(file_with_address) as json_file:
+            self._data = json.load(json_file) 
+        
+        # 5.7.20 Here, will have to handle exception if this file doesn't exist, and 
+        # promptfor input. Also, should check for validity. 
+
+        return(self._data["IP_ADDRESS"])
+
+    # give the output a name...
+    def get_timestamp_file(self):
+                
+        # define the filename, timestamp only, for now
+        # (future) add an input to change the descriptor
         datestring = datetime.now().strftime("%m.%d.%y_%H-%M-%S")
         descriptor = 'Rigol-'
 
@@ -106,66 +156,17 @@ class RigolGrab(object):
         
         return (file_to_write)
 
-    def verbose_print(self, *args):
-        if (self._verbose): print(*args)
-
-    def err_out(self, message):
-        self.report_failure(message)
-        sys.exit(message + '...quitting')
-
-    def close(self):
-        self._rigol.close()
-        self._resource_manager.close()
-
-    @classmethod
-    def open_file_with_system_viewer(cls, filepath):
-        subprocess.call(('open', filepath))
-
-    def get_IPAddress(self):
-        file_with_address = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
-        
-        # "It is good practice to use the with keyword when dealing with file objects. The 
-        # advantage is that the file is properly closed after its suite finishes, even if 
-        # an exception is raised at some point. ... If you’re not using the with keyword, 
-        # then you should call f.close() to close the file and immediately free up any 
-        # system resources used by it."
-        with open(file_with_address) as json_file:
-            data = json.load(json_file) 
-        
-        # 5.7.20 Here, will have to handle exception if this file doesn't exist, and 
-        # promptfor input. Also, should check for validity. 
-
-        return(data["IP_ADDRESS"])
-
+    # access the FOLDER configuration parameter
+    # (future) could combine with IP_ADDRESS method, and add other parameters
     def get_folder(self):
-        # 5.7.20 This is redundent with get_IPAddress, but OK for now. 
-        file_with_folder = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
-        
-        with open(file_with_folder) as json_file:
-            data = json.load(json_file) 
         
         # 5.7.20 Here, will have to handle exception if this file doesn't exist, and 
         # prompt for input. Also, should check for validity. 
 
-        return(data["FOLDER"])
+        # for now, this is OK
+        return(self._data["FOLDER"])
 
-
-    def report_failure(self, message):
-        NORM_FONT= ("San Francisco", 12)
-
-        self.popup = tk.Tk()
-        self.popup.wm_title("Simple Rigol Grab")
-        
-        tk.Label(self.popup, font=NORM_FONT, text=message + '...quitting').pack(side="top", padx=10, pady=10)
-        b1 = tk.Button(self.popup, text="OK", command=self.popup.destroy)
-        # add a timeout
-        b1.after(3000, lambda: self.popup.destroy()) # time in ms (so 2000 is 5s)
-        b1.pack(pady=10)
-        self.popup.eval('tk::PlaceWindow . center')
-
-        self.popup.mainloop()
-
-
+    # success window displays the image and times-out...  
     def report_status(self, filename):
         NORM_FONT= ("San Francisco", 12)
         
@@ -180,13 +181,50 @@ class RigolGrab(object):
         tk.Button(self.pic, text="OK", command=self.pic.destroy).pack(side="right", pady=10, padx=15)
         
         # add a timeout
+        # why the 'lambda' here? some examples from the internets have this. why?  
+        # other examples from the internets do not. 
         self.pic.after(5000, lambda: self.pic.destroy()) # time in ms (so 5000 is 5s)
         self.pic.resizable(0,0)
 
         self.pic.mainloop()
 
+    # Why is this (@classmethod) decoration used here? 
+    # "A class method is a method that is bound to a class rather than its object. 
+    # It doesn't require creation of a class instance, much like staticmethod."
+    # Note the 'cls' parameter. But I still don't get it. 
+    @classmethod
+    def open_file_with_system_viewer(cls, filepath):
+        subprocess.call(('open', filepath))
+  
+   # error message and quit... 
+    def err_out(self, message):
+        self.report_failure(message)
+        sys.exit(message + '...quitting')
+ 
+    # error popup and time-out... 
+    def report_failure(self, message):
+        NORM_FONT= ("San Francisco", 12)
+
+        self.popup = tk.Tk()
+        self.popup.wm_title("Simple Rigol Grab")
+        
+        tk.Label(self.popup, font=NORM_FONT, text=message + '...quitting').pack(side="top", padx=10, pady=10)
+        b1 = tk.Button(self.popup, text="OK", command=self.popup.destroy)
+        # add a timeout
+        b1.after(3000, lambda: self.popup.destroy()) # time in ms (so 2000 is 5s)
+        b1.pack(pady=10)
+        self.popup.eval('tk::PlaceWindow . center')
+
+        self.popup.mainloop()
+   
+    # shut it down...
+    def close(self):
+        self._rigol.close()
+        self._resource_manager.close()
+
+# the 'program'... 
 if __name__ == '__main__':
 
-    grabber = RigolGrab(verbose=False)
-    grabber.grab(grabber.get_timestamp_file(), auto_view=False)
+    grabber = RigolGrab()
+    grabber.grab()
     grabber.close()
