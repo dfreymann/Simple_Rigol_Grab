@@ -136,7 +136,7 @@ class RigolGrab(object):
             self._data = json.load(json_file) 
         
         # 5.7.20 Here, will have to handle exception if this file doesn't exist, and 
-        # promptfor input. Also, should check for validity. 
+        # prompt for input. Also, should check for validity. 
 
         return(self._data["IP_ADDRESS"])
 
@@ -196,7 +196,7 @@ class RigolGrab(object):
     def open_file_with_system_viewer(cls, filepath):
         subprocess.call(('open', filepath))
   
-   # error message and quit... 
+    # error message and quit... 
     def err_out(self, message):
         self.report_failure(message)
         sys.exit(message + '...quitting')
