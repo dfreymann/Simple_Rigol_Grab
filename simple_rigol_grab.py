@@ -129,8 +129,8 @@ class RigolGrab(object):
         
         # "It is good practice to use the with keyword when dealing with file objects. The 
         # advantage is that the file is properly closed after its suite finishes, even if 
-        # an exception is raised at some point. ... If you’re not using the with keyword, 
-        # then you should call f.close() to close the file and immediately free up any 
+	# an exception is raised at some point. ... if you're not using the with keyword,        
+	# then you should call f.close() to close the file and immediately free up any 
         # system resources used by it."
         with open(file_with_address) as json_file:
             self._data = json.load(json_file) 

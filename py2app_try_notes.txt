@@ -1,0 +1,45 @@
+5.10.20 First attempt to use py2app. Did not go well. 
+
+Running ./dist/simple_rigol_grab.app/Contents/MacOS/simple_rigol_grab
+
+As the 'failure' popup was being loaded (but no message yet), got a black screen -> login screen!
+Found this in the terminal window on relogin: 
+
+---
+[Gradus:_CODE/Python/SimpleRigolGrab] freymann% ./dist/simple_rigol_grab.app/Contents/MacOS/simple_rigol_grab 
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.160 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.161 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.161 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.161 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.161 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.161 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+2020-05-10 09:46:59.161 simple_rigol_grab[1600:84727] CGSTrackingRegionSetIsEnabled returned CG error 268435459
+
+  [Restored May 10, 2020 at 9:47:18 AM]
+Last login: Sun May 10 09:47:09 on console
+--- 
+
+Same thing happens if I double click the app icon. 
+BUT - simply running from the command line - python3 simple_rigol_grab.py - works fine.
+
+I'm running OS X 10.14.6
+/Library/Frameworks/Python.framework/Versions/3.8/bin/python3
+tkinter.TCL_VERSION: 8.6
+tkinter.TK_VERSION: 8.6
+tkinter.info_patchlevel: 8.6.8
+
+Quick google Links re this error:
+https://github.com/pyinstaller/pyinstaller/issues/4334
+https://stackoverflow.com/questions/57386588/tkinter-tk-error-that-kills-and-logoff-my-macbook-pro
+
+
+
