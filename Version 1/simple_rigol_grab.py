@@ -1,7 +1,10 @@
 # dmf 5.6.20 
 # simple_rigol_grab
-# 
+#
 # attempt to simplify my usage of rigol_grab (OS X only)
+#
+# 5.10.20   - version 1, using tkinter for info windows
+#           - runs from the command line: python3 simple_rigol_grab.py
 #
 # configuration: 
 #   > rigol connected via known IP address

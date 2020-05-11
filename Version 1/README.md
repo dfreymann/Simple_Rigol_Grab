@@ -4,6 +4,8 @@ An attempt to simplify usage of rigol_grab (_OS X only_) to grab images from my 
 
 Plus, learn Python.
 
+Version 1 is implemented using tkinter to show info windows. However, there's a problem when trying to convert to an app on Mac OSX 10.14.6 (see 'py2app_try_notes.txt'), so as far as converting to an app, I'm SOL for now. This version can be used from the command line and works just fine.
+
 ## Configuration
 
 * Rigol connected to ethernet with known IP address
@@ -11,6 +13,8 @@ Plus, learn Python.
        '~/Library/Application Support/SimpleRigolGrab.json'
 
 ## Functionality
+
+python3 simple_rigol_grab.py
 
 * Grab the image from the rigol
 * If success,
