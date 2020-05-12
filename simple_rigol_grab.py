@@ -4,8 +4,11 @@
 # attempt to simplify my usage of rigol_grab (OS X only)
 #
 # 5.10.20   - version 1, using tkinter for info windows
-#           - runs from the command line: python3 simple_rigol_grab.py
-#
+#           - runs from the command line: python3 simple_rigol_grab_v1.py
+# 5.11.20   - begin converting from tkinter to PyQt for 
+#             informational windows
+# 5.12.20   - PyQt GUI setup completed. Running properly from command line. 
+# 
 # configuration: 
 #   > rigol connected via known IP address
 #   > known IP address and output folder stored in 
@@ -36,18 +39,21 @@
 #  7.1) Add announcement if failure, also
 #  8) Read target folder (e.g. Desktop) from external file
 #  9) Fully annotate 'code for beginners'
+#  10) Convert to PyQT GUI from tkinter
 # To do:
 #  - 
-#  10) Convert to App
-#  11) Convert to menubar App (only?)
+#  11) Clean up call to imagewin GUI routines 
+#  12) Update (figure out) LICENSE file and README.md
+#  13) Convert to App
+#  14) Convert to menubar App (only?)
 # Future:  
 #  -
-#  12) Prompt for file descriptor to add to filename 
-#  13) Image file to Clipboard? 
-#  14) Prompt for IP if external not available, and write to JSON
-#  15) Prompt for target folder if not defined, and write to JSON
-#  16) Add an 'edit' button to image window to open in local editor
-#  17) ... other? 
+#  13) Prompt for file descriptor to add to filename 
+#  14) Image file to Clipboard? 
+#  15) Prompt for IP if external not available, and write to JSON
+#  16) Prompt for target folder if not defined, and write to JSON
+#  17) Add an 'edit' button to image window to open in local editor
+#  18) ... other? 
 #  
 # ---------
 # based on original source - 
@@ -69,6 +75,11 @@ from datetime import datetime
 
 # use this to handle file path
 from pathlib import Path 
+
+# local library implementing simple PyQT GUI handling:
+#   imagewin(the_filename).displayImage()       - display the succesfully retreived image
+#   failpopup(failure_message).displayPopup()   - notify of failure to find the rigol 
+from imagewin import *
 
 # Inherit base class called 'object'. Python 2 requires this to define 'new style'
 # class; Python 3 this is optional but good practice.  
@@ -98,7 +109,7 @@ class RigolGrab(object):
             f.write(bytearray(buf))
 
         # report succesful write and display the image 
-        self.report_status(filename)
+        c = display_grab_success(filename).show()
 
         # (future) this will be re-configured to respond to an 'edit' button during
         # display (which otherwise times-out and closes) to go directly to editing
@@ -169,28 +180,6 @@ class RigolGrab(object):
         # for now, this is OK
         return(self._data["FOLDER"])
 
-    # success window displays the image and times-out...  
-    def report_status(self, filename):
-        NORM_FONT= ("San Francisco", 12)
-        
-        self.pic = tk.Tk()
-        self.pic.title("Simple Rigol Grab")
-        
-        icon = tk.PhotoImage(file=filename)
-        msg = "  " + str(filename) + " has been captured succesfully"
-        
-        tk.Label(self.pic, image=icon).pack(side="top")
-        tk.Label(self.pic, text=msg, font=NORM_FONT).pack(side="left",pady=0)
-        tk.Button(self.pic, text="OK", command=self.pic.destroy).pack(side="right", pady=10, padx=15)
-        
-        # add a timeout
-        # why the 'lambda' here? some examples from the internets have this. why?  
-        # other examples from the internets do not. 
-        self.pic.after(5000, lambda: self.pic.destroy()) # time in ms (so 5000 is 5s)
-        self.pic.resizable(0,0)
-
-        self.pic.mainloop()
-
     # Why is this (@classmethod) decoration used here? 
     # "A class method is a method that is bound to a class rather than its object. 
     # It doesn't require creation of a class instance, much like staticmethod."
@@ -201,24 +190,8 @@ class RigolGrab(object):
   
     # error message and quit... 
     def err_out(self, message):
-        self.report_failure(message)
+        d = display_grab_failure(message).show()
         sys.exit(message + '...quitting')
- 
-    # error popup and time-out... 
-    def report_failure(self, message):
-        NORM_FONT= ("San Francisco", 12)
-
-        self.popup = tk.Tk()
-        self.popup.wm_title("Simple Rigol Grab")
-        
-        tk.Label(self.popup, font=NORM_FONT, text=message + '...quitting').pack(side="top", padx=10, pady=10)
-        b1 = tk.Button(self.popup, text="OK", command=self.popup.destroy)
-        # add a timeout
-        b1.after(3000, lambda: self.popup.destroy()) # time in ms (so 2000 is 5s)
-        b1.pack(pady=10)
-        self.popup.eval('tk::PlaceWindow . center')
-
-        self.popup.mainloop()
    
     # shut it down...
     def close(self):
