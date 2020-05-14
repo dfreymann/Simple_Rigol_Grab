@@ -3,3 +3,4 @@
 .pylintrc
 build
 dist
+*cache*
