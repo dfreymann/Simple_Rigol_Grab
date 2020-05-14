@@ -1,6 +1,10 @@
 # imagewin.py 
 # dmf 5.12.20
 # GUI routines for SimpleRigolGrab 
+#
+# ---------
+# Copyright (c) 2020 Douglas M Freymann 
+#
 
 import sys
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QApplication

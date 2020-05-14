@@ -43,6 +43,9 @@
 # from the command line. 
 #  
 # ---------
+# Copyright (c) 2019 Robert Poor
+# Copyright (c) 2020 Douglas M Freymann 
+#
 # based on original source - 
 # rigol_grab: save Rigol Oscilloscope display as a .png file
 # source: https://github.com/rdpoor/rigol-grab

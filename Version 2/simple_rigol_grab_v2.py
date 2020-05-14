@@ -1,6 +1,5 @@
-# simple_rigol_grab.py
 # dmf 5.6.20 
-# Grabber routines for SimpleRigolGrab
+# simple_rigol_grab
 #
 # attempt to simplify my usage of rigol_grab (OS X only)
 #
@@ -9,9 +8,6 @@
 # 5.11.20   - begin converting from tkinter to PyQt for 
 #             informational windows
 # 5.12.20   - PyQt GUI setup completed. Running properly from command line. 
-# 5.14.20   - Menu bar grabber icon menu implemented. Now handles repeated
-#             grab requests, and fails gracefully if can't connect to 
-#             instrument. Nice.
 # 
 # configuration: 
 #   > rigol connected via known IP address
@@ -44,29 +40,29 @@
 #  8) Read target folder (e.g. Desktop) from external file
 #  9) Fully annotate 'code for beginners'
 #  10) Convert to PyQT GUI from tkinter
-#  11) Convert to menu bar handling of 'Grab' and 'Quit'
 # To do:
+#  - 
+#  11) Clean up call to imagewin GUI routines 
 #  12) Update (figure out) LICENSE file and README.md
-#  13) Clean up call to imagewin GUI routines 
-#  14) Error handling and prompts if external JSON not present
+#  13) Convert to App
+#  14) Convert to menubar App (only?)
+# Future:  
+#  -
+#  13) Prompt for file descriptor to add to filename 
+#  14) Image file to Clipboard? 
 #  15) Prompt for IP if external not available, and write to JSON
 #  16) Prompt for target folder if not defined, and write to JSON
-#  17) Convert to App
-# Someday:  
-#  18) Prompt for file descriptor to add to filename 
-#  19) Image file to Clipboard? 
-#  20) Add an 'edit' button to image window to open in local editor
+#  17) Add an 'edit' button to image window to open in local editor
 #  18) ... other? 
 #  
 # ---------
 # Copyright (c) 2019 Robert Poor
 # Copyright (c) 2020 Douglas M Freymann 
-# 
-# Based on original source - 
+#
+# based on original source - 
 # rigol_grab: save Rigol Oscilloscope display as a .png file
 # source: https://github.com/rdpoor/rigol-grab
 # 
-
 
 import json         
 import subprocess   
@@ -86,7 +82,7 @@ from pathlib import Path
 # local library implementing simple PyQT GUI handling:
 #   imagewin(the_filename).displayImage()       - display the succesfully retreived image
 #   failpopup(failure_message).displayPopup()   - notify of failure to find the rigol 
-from simplewin import *
+from imagewin_v2 import *
 
 # Inherit base class called 'object'. Python 2 requires this to define 'new style'
 # class; Python 3 this is optional but good practice.  
@@ -106,14 +102,7 @@ class RigolGrab(object):
 
         # get the image data from the oscilloscope. method self_rigol() identifies 
         # and opens the ni-visa resource if available. 
-
-        instrument = self.rigol()
-        if (instrument == None):
-            # failed to open
-            return
-        else:
-            # success! 
-            buf = instrument.query_binary_values(':DISP:DATA? ON,0,PNG', datatype='B')
+        buf = self.rigol().query_binary_values(':DISP:DATA? ON,0,PNG', datatype='B')
 
         # the filename contains a timestamp only, for now
         filename = self.get_timestamp_file()
@@ -128,8 +117,6 @@ class RigolGrab(object):
         # (future) this will be re-configured to respond to an 'edit' button during
         # display (which otherwise times-out and closes) to go directly to editing
         # self.open_file_with_system_viewer(filename)
-
-        self.close()
 
     # find the device... 
     def rigol(self):
@@ -146,25 +133,21 @@ class RigolGrab(object):
                 self._rigol = self._resource_manager.open_resource(name, write_termination='\n', read_termination='\n')
             except:
                 self.err_out('Could not open oscilloscope')
-                return self._rigol
 
             # check it's a Rigol
             if ("RIGOL" in self._rigol.query("*IDN?")) is False:
-                # something was found, but not a Rigol
-                self._rigol = None
                 self.err_out('No RIGOL at that IP address')
 
         return self._rigol
 
     # access the IP configuration parameter
     def get_IPaddress(self):
-        
         file_with_address = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
         
         # "It is good practice to use the with keyword when dealing with file objects. The 
         # advantage is that the file is properly closed after its suite finishes, even if 
-	    # an exception is raised at some point. ... if you're not using the with keyword,        
-	    # then you should call f.close() to close the file and immediately free up any 
+	# an exception is raised at some point. ... if you're not using the with keyword,        
+	# then you should call f.close() to close the file and immediately free up any 
         # system resources used by it."
         with open(file_with_address) as json_file:
             self._data = json.load(json_file) 
@@ -211,9 +194,16 @@ class RigolGrab(object):
     # error message and quit... 
     def err_out(self, message):
         d = display_grab_failure(message).show()
+        sys.exit(message + '...quitting')
    
-    # close down after succesful open
+    # shut it down...
     def close(self):
         self._rigol.close()
         self._resource_manager.close()
 
+# the 'program'... 
+if __name__ == '__main__':
+
+    grabber = RigolGrab()
+    grabber.grab()
+    grabber.close()

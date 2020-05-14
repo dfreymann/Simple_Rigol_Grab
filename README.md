@@ -1,14 +1,10 @@
-# simple_rigol_grab
+# SimpleRigolGrab
+dmf 5.14.20
 
-An attempt to simplify usage of rigol_grab (_OS X only_) to grab images from my Rigol DS1054Z oscilloscope.
+Persistent menu bar GUI to handle grabbing Rigol screen images at will
 
-[TO BE REVISED!]
-
-Short version
-
-* originally using tkinter, but problems... so, 'Version 1'.
-
-* will now split to using PyQT... so, ''Version 2'.  This is because I want the end product to be either an app (click and run) or a menu bar app.
+Currently runs from the command line 'python3 SimpleRigolGrab' but the
+goal is to convert this to an app.
 
 ## Configuration
 
@@ -33,3 +29,10 @@ python3 simple_rigol_grab.py
 ## In progress
 
 * The goal is to convert this to an app -> _click and done_
+
+## Origin
+
+Development originated from the code for rigol-grab by Robert Poor
+
+rigol_grab: save Rigol Oscilloscope display as a .png file
+source: https://github.com/rdpoor/rigol-grab
