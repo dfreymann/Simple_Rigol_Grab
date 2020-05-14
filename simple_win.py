@@ -150,7 +150,7 @@ class failpopup(QWidget):
 
         # This sets a time-out for the display
         time = QTimer(self)               
-        time.setInterval(10000)
+        time.setInterval(3000)
         # Need lambda here! 
         time.timeout.connect(lambda: self.close())
         # Need to start it! 
