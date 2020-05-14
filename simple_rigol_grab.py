@@ -85,7 +85,7 @@ from pathlib import Path
 # local library implementing simple PyQT GUI handling:
 #   imagewin(the_filename).displayImage()       - display the succesfully retreived image
 #   failpopup(failure_message).displayPopup()   - notify of failure to find the rigol 
-from simplewin import *
+from simple_win import *
 
 # Inherit base class called 'object'. Python 2 requires this to define 'new style'
 # class; Python 3 this is optional but good practice.  

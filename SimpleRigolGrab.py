@@ -71,7 +71,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QAction
 
 # local routines to interact with rigol - 
-from simplegrab import *              
+from simple_rigol_grab import *              
 
 class grabbermenu(object):
 
