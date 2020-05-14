@@ -67,7 +67,6 @@
 # source: https://github.com/rdpoor/rigol-grab
 # 
 
-
 import json         
 import subprocess   
 import sys          
@@ -159,7 +158,7 @@ class RigolGrab(object):
     # access the IP configuration parameter
     def get_IPaddress(self):
         
-        file_with_address = Path.home() / 'Library/Application Support/SimpleRigolGrab.json' 
+        file_with_address = Path.home() / 'Library/Application Support/simple_rigol_grab.json' 
         
         # "It is good practice to use the with keyword when dealing with file objects. The 
         # advantage is that the file is properly closed after its suite finishes, even if 
