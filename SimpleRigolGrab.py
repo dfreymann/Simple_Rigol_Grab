@@ -30,7 +30,7 @@
 #   > known IP address and output folder stored in 
 #       '~/Library/Application Support/SimpleRigolGrab.json'
 #
-# functionality: 
+# Functionality: 
 #   > grab the image from the rigol
 #   > if success, save file to disk and display the image for 5s  
 #   > if fail, error message popup
