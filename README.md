@@ -3,8 +3,10 @@ dmf 5.14.20
 
 Persistent menu bar GUI to handle grabbing Rigol screen images at will
 
-Currently runs from the command line 'python3 SimpleRigolGrab' but the
-goal is to convert this to an app.
+Compiles to an OS X app using 'python3 setup.py py2app'. 
+So this is done for now, pending additional improvements/ideas. 
+
+Also runs from the command line 'python3 SimpleRigolGrab'.
 
 ## Configuration
 
