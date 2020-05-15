@@ -9,7 +9,7 @@ from setuptools import setup
 
 APP = ['SimpleRigolGrab.py']
 DATA_FILES = ['grabbericon.png']
-OPTIONS = {}
+OPTIONS = {'iconfile': 'grabbericon_icon.icns'}
 
 setup(
     app=APP,
