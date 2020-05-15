@@ -49,13 +49,13 @@
 #  9) Fully annotate 'code for beginners'
 #  10) Convert to PyQT GUI from tkinter
 #  11) Convert to menu bar handling of 'Grab' and 'Quit'
-# To do:
-#  12) Update (figure out) LICENSE file and README.md
-#  13) Clean up call to imagewin GUI routines 
-#  14) Error handling and prompts if external JSON not present
-#  15) Prompt for IP if external not available, and write to JSON
-#  16) Prompt for target folder if not defined, and write to JSON
-#  17) Convert to App
+#  12) Convert to App
+# # To do:
+#  13) Update (figure out) LICENSE file and README.md
+#  14) Clean up call to simple_win GUI routines 
+#  15) Error handling and prompts if external JSON not present
+#  16) Prompt for IP if external not available, and write to JSON
+#  17) Prompt for target folder if not defined, and write to JSON
 # Someday:  
 #  18) Prompt for file descriptor to add to filename 
 #  19) Image file to Clipboard? 
