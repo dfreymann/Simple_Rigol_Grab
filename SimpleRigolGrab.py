@@ -50,7 +50,7 @@
 #  10) Convert to PyQT GUI from tkinter
 #  11) Convert to menu bar handling of 'Grab' and 'Quit'
 #  12) Convert to App
-# # To do:
+# To do:
 #  13) Update (figure out) LICENSE file and README.md
 #  14) Clean up call to simple_win GUI routines 
 #  15) Error handling and prompts if external JSON not present
