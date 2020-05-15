@@ -1,0 +1,73 @@
+5.14.20 See 'py2app' notes at the end. 
+With the setup.py file here, can get a workable app using py2app. 
+
+Still need a .icns (icon) file... 
+
+----
+
+5.14.20 pyinstaller SimpleRigolGrab.py 
+
+Get an error: 
+...
+  File "/Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/PyInstaller/building/utils.py", line 662, in strip_paths_in_code
+    return code_func(co.co_argcount, co.co_kwonlyargcount, co.co_nlocals, co.co_stacksize,
+TypeError: an integer is required (got type bytes)
+
+I'm running /Library/Frameworks/Python.framework/Versions/3.8/bin/python3
+
+pyinstaller -version is 3.4 
+
+This has come up on the internets: 
+https://github.com/pyinstaller/pyinstaller/issues/4580
+
+With statement that:
+ "PyInstaller currently doesn't support 3.8. I suggest you build with 3.7 or 
+ earlier until python 3.8 is supported"
+
+Suggestion at https://github.com/pyinstaller/pyinstaller/issues/4265
+is to: 
+    "pip install https://github.com/pyinstaller/pyinstaller/archive/develop.tar.gz
+    Direct install the latest version can compatible with python 3.8"
+
+------
+
+An alternative may be fbs 
+https://www.learnpyqt.com/courses/packaging-and-distribution/packaging-pyqt5-apps-fbs/
+
+------
+
+And can try py2app
+
+... following https://py2app.readthedocs.io/en/latest/tutorial.html#create-a-setup-py-file
+
+the app does not contain the menubar icon... OK, add it to the py2applet argument list
+which then lists the file (grabbericon.png) in the DATA_FILES entry: 
+
+    APP = ['SimpleRigolGrab.py']
+    DATA_FILES = ['grabbericon.png']
+    OPTIONS = {}
+
+And there you go! (in alias mode)
+
+Try python setup.py py2app to create for deployment... 
+and get error! 
+
+> /Users/freymann/Dropbox/Electronics/_CODE/Python/SimpleRigolGrab/build/bdist.macosx-10.6-x86_64/python2.7-standalone/app/collect/test/floating_points.txt
+*** creating application bundle: SimpleRigolGrab ***
+error: /Users/freymann/Dropbox/Electronics/_CODE/Python/SimpleRigolGrab/dist/SimpleRigolGrab.app/Contents/MacOS/SimpleRigolGrab: Operation not permitted
+
+Discussion here: 
+https://stackoverflow.com/questions/33197412/py2app-operation-not-permitted
+
+with a solution... 
+
+OK, works. have a "SimpleRigolGrab" application... 
+
+Holy crap, dist/ (i.e the app) contains 2K+ (2949) files... 
+and the app is 233.7 MB. 
+
+But it works. 
+
+
+
+
