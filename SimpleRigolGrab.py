@@ -51,13 +51,13 @@
 #  11) Convert to menu bar handling of 'Grab' and 'Quit'
 #  12) Convert to App
 # To do:
-#  13) Update (figure out) LICENSE file and README.md
-#  14) Clean up call to simple_win GUI routines 
+#  13) > do now! > Prompt for file descriptor to add to filename 
+#  14) Update (figure out) LICENSE file and README.md
 #  15) Error handling and prompts if external JSON not present
 #  16) Prompt for IP if external not available, and write to JSON
 #  17) Prompt for target folder if not defined, and write to JSON
+#  18) Clean up call to simple_win GUI routines 
 # Someday:  
-#  18) Prompt for file descriptor to add to filename 
 #  19) Image file to Clipboard? 
 #  20) Add an 'edit' button to image window to open in local editor
 #  18) ... other? 
