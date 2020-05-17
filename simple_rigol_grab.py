@@ -122,13 +122,22 @@ class RigolGrab(object):
                 
         # define the filename, timestamp only, for now
         # (future) add an input to change the descriptor
-        datestring = datetime.now().strftime("%m.%d.%y_%H-%M-%S")
-        descriptor = 'Rigol-'
+        datestring = datetime.now().strftime("%y-%m-%d_%H.%M.%S")
 
-        # future: prompt for descriptor here (replace 'Rigol-')
-        # will need error checking
+        # pick up a descriptor to include in the filename string
+        # defaults to 'Rigol' if no text entered
+        t = get_descriptor()
+        descriptor = t.get()
 
-        filestring = descriptor + datestring + '.png'
+        # Future: add handling of blank spaces or illegal characters,
+        # etc, here. However, it is possible to just type out a comment 
+        # text and include it in the filename (on OS X). So, can address
+        # this later.
+
+        filestring = datestring + ' - ' + descriptor + '.png'
+
+        print(filestring)
+
         file_to_write = Path.home() / self.get_folder() / filestring 
         
         return (file_to_write)

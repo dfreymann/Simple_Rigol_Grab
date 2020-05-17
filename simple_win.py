@@ -9,6 +9,7 @@
 import sys
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QApplication
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QInputDialog, QLineEdit
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QTimer, Qt
 
@@ -162,4 +163,18 @@ class failpopup(QWidget):
         
         # This shows and quits when done 
         self.show()
+
+class get_descriptor(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.title = "Simple Rigol Grab"
+
+    def get(self):
+        text, okPressed = QInputDialog.getText(self, "Filename","Enter a short descriptor:", QLineEdit.Normal, "")
+        if okPressed and text != '':
+            return(text)
+        else:
+            return("Rigol")
+
 

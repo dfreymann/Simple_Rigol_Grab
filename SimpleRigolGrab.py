@@ -19,6 +19,8 @@
 # 5.14.20   - Menu bar grabber icon menu implemented. Now handles repeated
 #             grab requests, and fails gracefully if can't connect to 
 #             instrument. Nice. 
+# 5.17.20   - Added a prompt for a file descriptor, which is appended to the 
+#             datestamped filename. 
 # 
 # Files:
 #   SimpleRigolGrab.py      - implements grabbermenu menu-bar GUI
@@ -50,17 +52,18 @@
 #  10) Convert to PyQT GUI from tkinter
 #  11) Convert to menu bar handling of 'Grab' and 'Quit'
 #  12) Convert to App
+#  13) Prompt for file descriptor to add to filename 
 # To do:
-#  13) > do now! > Prompt for file descriptor to add to filename 
 #  14) Update (figure out) LICENSE file and README.md
 #  15) Error handling and prompts if external JSON not present
 #  16) Prompt for IP if external not available, and write to JSON
 #  17) Prompt for target folder if not defined, and write to JSON
-#  18) Clean up call to simple_win GUI routines 
+#  18) Possibly, error checking on the filename descriptor string
+#  19) Clean up call to simple_win GUI routines 
 # Someday:  
-#  19) Image file to Clipboard? 
-#  20) Add an 'edit' button to image window to open in local editor
-#  18) ... other? 
+#  20) Image file to Clipboard? 
+#  21) Add an 'edit' button to image window to open in local editor
+#  22) ... other? 
 #
 # ---------
 # Copyright (c) 2020 Douglas M Freymann 
