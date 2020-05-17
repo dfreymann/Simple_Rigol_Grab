@@ -169,3 +169,4 @@ class RigolGrab(object):
         self._rigol.close()
         self._resource_manager.close()
 
+

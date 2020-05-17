@@ -178,3 +178,4 @@ class get_descriptor(QWidget):
             return("Rigol")
 
 
+
