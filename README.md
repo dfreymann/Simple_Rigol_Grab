@@ -38,3 +38,18 @@ Development originated from the code for rigol-grab by Robert Poor
 
 rigol_grab: save Rigol Oscilloscope display as a .png file
 source: https://github.com/rdpoor/rigol-grab
+
+## Images
+
+![App Icon:](images/App.png)
+
+Menubar Icon:
+
+Menubar Menu: 
+
+File Descriptor Popup:
+
+Capture Window: 
+
+
+
