@@ -51,15 +51,15 @@ Menubar Icon:
 
 Menubar Menu: 
 
-![Menubar Menu](Options.png)
+![Menubar Menu](images/Options.png)
 
 File Descriptor Popup:
 
-![File Descriptor](Descriptor.png)
+![File Descriptor](images/Descriptor.png)
 
 Capture Window: 
 
-![Capture Window](Capture.png)
+![Capture Window](images/Capture.png)
 
 
 
