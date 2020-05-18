@@ -1,4 +1,4 @@
-*.png
+ignore
 .vscode
 .pylintrc
 build
