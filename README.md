@@ -42,18 +42,23 @@ source: https://github.com/rdpoor/rigol-grab
 ## Images
 
 App Icon: 
+
 ![App Icon](images/App.png)
 
 Menubar Icon:
+
 ![Menubar Icon](images/MenuBar.png)
 
 Menubar Menu: 
+
 ![Menubar Menu](Options.png)
 
 File Descriptor Popup:
+
 ![File Descriptor](Descriptor.png)
 
 Capture Window: 
+
 ![Capture Window](Capture.png)
 
 
