@@ -29,9 +29,11 @@ python3 simple_rigol_grab.py
   * error message popup
 * Done
 
+* The goal was to convert this to an app -> _click and done_ -> use py2app -> Works well! 
+
 ## In progress
 
-* The goal is to convert this to an app -> _click and done_
+* See comments in code. Should handle missing files, bad formats, etc. To be done. 
 
 ## Origin
 
