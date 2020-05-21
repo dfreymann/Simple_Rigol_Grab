@@ -22,6 +22,7 @@ python3 simple_rigol_grab.py
 
 * Grab the image from the rigol
 * If success,
+  * prompt for a filename descriptor, 
   * save a .png image file to disk, and
   * display the image on the screen for 5s  
 * If fail,
